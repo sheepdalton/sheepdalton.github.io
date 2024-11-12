@@ -242,8 +242,14 @@ function processThis()
     let feedBackTop = `Skew ${sckew.toFixed(4)}, Entropy ${entropy.toFixed(4)} N=${elements} lines = ${lineMark} `;
     document.getElementById('feedbackArea').value = feedBackTop + feedBackText + indetSample ;
 
-    let entropyMark = 10.0 -  ( 7.0 * Math.sqrt( ((1.5845)** 2)  - ((entropy)**2)) )  ;
+    var  entropyMark = 10.0 ;
+    if (  entropy < 1.5845 )
+    {
+       entropyMark = 10 - ( 7.0 * Math.sqrt( ((1.5845)** 2)  - (entropy**2)) );
+    }
 
+    console.log("entropy ", entropy );
+    console.log("mark ", entropyMark );
     document.getElementById('total').value = `Depth ${lineMark.toFixed(1)} out of 10  structure ${entropyMark.toFixed(3)} out of 10  ` ;
 
 }
