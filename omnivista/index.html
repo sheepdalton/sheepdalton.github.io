@@ -1,0 +1,527 @@
+</html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omnivista V2025</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom styling for disabled menu item */
+    .disabled-text {
+      color:  #bfbfbf ; /* #df9840;  Grey color */
+      pointer-events: none;  /* Prevent clicks */
+    }
+  </style>
+   <!-- Add Bootstrap Icons CDN for icons -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+   <!-- Add Bootstrap CDN for button styling -->
+   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+ 
+
+   <style>
+    .tool-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px; /* Space between tools */
+    }
+
+    .tool-input {
+      display: none;
+    }
+
+    .tool-label {
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .tool-input:checked + .tool-label {
+      color: #007bff; /* Highlight color for active tool */
+      transform: scale(1.2);
+    }
+
+    .tool-label:hover {
+      color: #0056b3; /* Hover effect */
+      transform: scale(1.1);
+    }
+
+    /* Ensure output fills remaining space */
+    .output-container {
+      flex-grow: 1;
+      padding-left: 20px;
+      text-align: center; /* Center content */
+      font-size: 1.2rem;
+    }
+
+    /* Flex container for aligning items vertically in the band */
+    .main-container {
+      display: flex;
+      align-items: center; /* Aligns all content vertically */
+      gap: 10px; /* Space between items */
+    }
+  </style>
+
+  <!-- Link to your custom JavaScript file -->
+
+  <!-- this seems to work. -->
+   <!--
+
+  Icons
+
+
+  drag / zoom 
+    https://icons.getbootstrap.com/icons/cursor/
+
+  https://icons.getbootstrap.com/icons/hand-index/
+
+  Select Isovist(s) inspect.  
+
+  https://icons.getbootstrap.com/icons/bounding-box-circles/
+
+  Add isovist 
+
+  https://icons.getbootstrap.com/icons/asterisk/
+
+
+  view by point 
+  view by isovsit 
+  view network 
+   -->
+
+
+
+  <script src="./lib/p5.min.js"></script>
+  <script src="./WorkerCoordinator.js"> </script>
+ 
+</head>
+
+<body>
+  <script  src="OmniVista.js" ></script>
+
+
+  <!-- Navbar using Bootstrap -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Omnivista V2025</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <!-- Basic menu item -->
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="about.html" target="_blank" >About...</a>
+          </li>
+
+          <!-- Dropdown menu with sub-items -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              File
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="new_or_clear_Document()">New Empty Document (Clear)</a>
+              </li>
+              <li class="dropdown-item disabled-text">
+                <a class="nav-link" aria-disabled="true"  style="color: #bfbfbf; pointer-events: none;" href="javascript:void(0);" onclick="callP5_Not_Implemented()">Save In This Browser</a>
+              </li>
+              <li class="dropdown-item disabled">
+                <a class="nav-link" href="javascript:void(0);"  style="color: #bfbfbf; pointer-events: none;"onclick="callP5_Not_Implemented()">Save (download) To Local Disk...</a>
+              </li>
+              <!--
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);"  style="color: #bfbfbf; pointer-events: none;" onclick="callP5_Not_Implemented()">Open (upload)  Omnivista Save file  From My Disk...</a>
+              </li>
+            --> 
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" style="color: #ea810a;" onclick="callP5Open()">1️⃣ Import Building outline SVG...</a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="loadExampleDocument()">Open Sample Building SVG</a>
+              </li>
+ 
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li class="dropdown-item disabled ">
+                <a class="nav-link" href="javascript:void(0);" style="color: #bfbfbf; pointer-events: none;" onclick="callP5_Not_Implemented()">Download Omnivisa file...</a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="exportTableAskForName()">Download table...</a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);"  onclick="exportSVG()">Download Image(SVG)...</a>
+              </li>
+
+            </ul>
+          </li>
+
+          <!-- Dropdown menu with sub-items -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Edit
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li class="dropdown-item disabled">
+                <a class="nav-link" href="javascript:void(0);" onclick="callP5_Not_Implemented()">Copy (Screen as SVG)</a>
+              </li>
+              <li class="dropdown-item disabled">
+                <a class="nav-link" href="javascript:void(0);" onclick="callP5_Not_Implemented()">Cut</a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="deleteSelection()">Delete Selected isovist(s)</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="userDeSelectall()">Deselect All</a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="userSelectAll()">Select All</a>
+              </li>
+
+              
+
+
+              
+            
+              <!-- HOME Center zoom-->
+
+            </ul>
+          </li>
+
+                    <!-- Dropdown menu with sub-items -->
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        View 
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li class="dropdown-item">
+                          <a class="nav-link" href="javascript:void(0);" onclick="zoomInToMap()">Zoom In [+] (try using scrollwheel)</a>
+                        </li>
+                        <li class="dropdown-item">
+                          <a class="nav-link" href="javascript:void(0);" onclick="zoomOutMap()">Zoom Out [-]</a>
+                        </li>
+                        <li class="dropdown-item">
+                          <a class="nav-link" href="javascript:void(0);" onclick="home()"> Reset Zoom </a>
+                        </li>
+          
+                        <li>
+                          <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-item">
+                          <a class="nav-link" href="javascript:void(0);" onclick="goFullScreen()">Full Screen</a>
+                        </li> 
+                        <li class="dropdown-item">
+                          <a class="nav-link" href="javascript:void(0);" onclick="toggleShowConnections()">Show Connections</a>
+                        </li> 
+                        <li class="dropdown-item">
+                          <a class="nav-link" href="javascript:void(0);" onclick="toggleShowFullIsovists()">Show isovist</a>
+                        </li> 
+                        <li class="dropdown-item">
+                          <a class="nav-link" href="javascript:void(0);" onclick="toggleShowDOT()">Show Center</a>
+                        </li> 
+                        <li class="dropdown-item">
+                          <a class="nav-link" href="javascript:void(0);" onclick="nextColorDisplayMode()">Printable/Screen</a>
+                        </li> 
+                        
+                        <!---showConnections 
+                        <li class="dropdown-item disabled ">
+                          <a class="nav-link" href="javascript:void(0);" onclick="home()">?Table? ⟦T⟧</a>
+                        </li>
+                        --> 
+
+                        <!-- HOME Center zoom-->
+          
+                      </ul>
+                    </li>
+                    
+                         <!-- Measure -->
+                         <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Colour By 
+                          </a>
+                          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('area')">Area</a>
+                            </li>
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('perimeter',-1)">Perimeter</a>
+                            </li>
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('areaPerimRatio')">Area Perimeter Ratio</a>
+                            </li>
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('minRadial')">Minimal Radial</a>
+                            </li>
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('averageRadial')">Average Radial</a>
+                            </li>
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('maxRadial',-1)">Maximal Radial</a>
+                            </li>
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('driftMagnitude',-1)">|Drift| </a>
+                            </li>
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('connectivity')">Connectivity(Degree)</a>
+                            </li>
+                            
+                            <li>
+                              <hr class="dropdown-divider">
+                            </li>
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('totalStepDepth')">Total Depth</a>
+                            </li>
+                            <li>
+                              <hr class="dropdown-divider">
+                            </li>
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('area_overlap_connectivity',-1)">Area of overlap Connectivity </a>
+                            </li>
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('asymetricAreaTotalDepth')">Asymetric Area overlap TotalDepth</a>
+                            </li>
+                            <li class="dropdown-item">
+                              <a class="nav-link" href="javascript:void(0);" onclick="colorByMeasure('eigenCentrality', -1)">Eigen Centrality (experimental) </a>
+                            </li>
+                          </ul>
+                        </li>
+
+          <!-- Dropdown menu with sub-items -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Compute
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+             
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="askUserForMaxRadius()">Set Maximum isovist radius... ⟦M⟧</a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="doAllProcessingRandomIsovist()"> Compute Everything [R]</a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="fix_number_of_isovists_interative()">Fix number of Isovists</a>
+              </li>
+
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="start_grid_ALL_sequence()">Compute Everything Grid [g]</a>
+              </li>
+              
+
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="doAllRegularGirdIsovist()">Do VGA Grid anylsis</a>
+              </li>
+                <li class="dropdown-item">
+                  <a class="nav-link" href="javascript:void(0);" onclick="askForGridSpacing();">Set Grid Spaceing... </a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="start_hand_isovist_sequence();">Process Hand Seeded isovists</a>
+             </li>
+              
+              
+            </ul>
+          </li>
+        
+           <!-- Dropdown menu with sub-items -->
+           <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Dev
+            </a>
+            
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="randomBlueNoiseGrid()">Random Grid generate ( blue ) </a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="showQuadTree()">Run Intersection ⟦R⟧</a>
+              </li>
+
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="showQuadTree()">Run Intersection ⟦R⟧</a>
+              </li>
+
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="doDirectedAreaOverlapChoice()">Directed Area overlap choice </a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="findStepDepthFromSelection()">Step depth from Selection</a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="callP5_Not_Implemented()">Test Itergration...</a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="callP5_Not_Implemented()">Test Fast </a>
+              </li>
+            </ul>
+          </li>
+
+         
+          <!-- Dropdown menu with sub-items -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Help
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="showQuadTree()">User Guide</a>
+              </li>
+
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="callP5_Not_Implemented()">How to Cite</a>
+              </li>
+              <li class="dropdown-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="callP5_Not_Implemented()">How to support</a>
+              </li>
+            
+            </ul>
+          </li>
+
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container mt-4">
+    <div class="d-flex align-items-center"> 
+      <div class="tool-container">
+        <!-- Pan/zoom Tool -->
+        <input type="radio" id="arrows-move" name="tool" class="tool-input">
+        <label for="arrows-move" class="tool-label">
+          <i class="bi bi-arrows-move"></i> <!-- Changed icon -->
+        </label>
+
+        <!-- info about spot  -->
+        <input type="radio" id="cursor" name="tool" class="tool-input">
+        <label for="cursor" class="tool-label">
+          <i class="bi bi-cursor"></i>
+        </label>
+
+        
+        <!-- drag selection  Bounding-box-circles Tool -->
+        <input type="radio" id="bounding-box-circles" name="tool" class="tool-input">
+        <label for="bounding-box-circles" class="tool-label">
+          <i class="bi bi-border-all"></i>
+        </label>
+
+        <!-- add isovist by hand Asterisk Tool -->
+        <input type="radio" id="asterisk" name="tool" class="tool-input">
+        <label for="asterisk" class="tool-label">
+          <i class="bi bi-star"></i>
+        </label>
+      </div> <!-- end of tools -->
+    <div id="output"></div>
+  </div>
+</div>
+
+
+
+  <!-- Bootstrap JS (Optional for full functionality like dropdowns, modals, etc.) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+  <!-- Custom JavaScript for calling p5.js functions -->
+  <script>
+    function showInputModal() {
+      // Show the modal
+      var result = prompt("this is a prompt "); 
+      console.log(result ); 
+    }
+    function fix_number_of_isovists_interative() 
+    { 
+       
+        let count  = getFixedNumberOfIsovists();
+        do {
+            let input = prompt("Enter the number of isovists (or 0 for no limit):" , getFixedNumberOfIsovists());
+            if (input === null) {
+              return null; // Exit function if user cancels
+          }
+
+            count = Number(input);
+        } while (isNaN(count) || count <= 0);
+    
+        console.log('n = '  + count ); 
+        setFixedNumberOfIsovists( count ); 
+    }
+    
+      
+    function userDeSelectall()
+    { 
+      console.log(" this is working"); 
+      deselectAll(); 
+    }
+    function exportSVG()
+    { 
+      exportCurrentViewAsSVGAskUserForName(); 
+    }
+    function userSelectAll()
+    { 
+      console.log("Call User Select all"); 
+      select_All(); 
+      //console.log("Called User Select all"); 
+    }
+  
+
+    function callP5Open() {
+      // This will call the function defined in your p5.js sketch to update the output
+      updateOutput('Open file ');// Works.
+    }
+    function callP5Save() {
+      updateOutput('Save  ');
+    }
+    function goFullScreen(){ 
+      go_full_screen(); 
+    }
+    function callP5_Not_Implemented() {
+      updateOutput('Sorry not yet implemented!  ');
+    }
+
+
+    // author GPT: This function will be called when a tool is selected
+    function tool_changed() {
+      const selectedTool = document.querySelector('input[name="tool"]:checked').id;
+      console.log(`Selected tool: ${selectedTool}`);
+      const toolMap = {
+        "arrows-move": 0,
+        "cursor": 1,
+        "bounding-box-circles": 2,
+        "asterisk": 3
+      };
+      const toolValue = toolMap[selectedTool] || 0;
+      setCurrentTool( toolValue  ); 
+    }
+
+    //author GPT: Add event listeners for each radio button to call tool_changed() when a tool is selected
+    document.querySelectorAll('.tool-input').forEach(input => {
+      input.addEventListener('change', tool_changed);
+    });
+ 
+  </script>
+
+</body>
+
+</html>
